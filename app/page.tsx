@@ -1,5 +1,16 @@
-export default function Home() {
+import Hero from '../components/Hero';
+import InfoBoxes from '@/components/InfoBoxes';
+import HomeProperties from "@/components/HomeProperties";
+
+const HomePage = () => {
+
+  console.log(process.env.MONGODB_URI);
   return (
-    <div>Home</div>
+    <>
+      <Hero />
+      <InfoBoxes />
+      <HomeProperties />
+    </>
   );
-}
+};
+export default HomePage;
