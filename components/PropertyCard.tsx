@@ -8,21 +8,22 @@ import {
   FaMapMarker,
 } from 'react-icons/fa';
 
-import { Property } from '@/app/types';
+
+import { IProperty } from '@/models/Property';
 
 interface PropertyCardProps {
-  property: Property;
+  property: IProperty;
 }
 
 const PropertyCard = ({ property }: PropertyCardProps) => {
   const getRateDisplay = () => {
     const { rates } = property;
 
-    if (rates.monthly) {
+    if (rates?.monthly) {
       return `$${rates.monthly.toLocaleString()}/mo`;
-    } else if (rates.weekly) {
+    } else if (rates?.weekly) {
       return `$${rates.weekly.toLocaleString()}/wk`;
-    } else if (rates.nightly) {
+    } else if (rates?.nightly) {
       return `$${rates.nightly.toLocaleString()}/night`;
     }
   };
@@ -79,7 +80,7 @@ const PropertyCard = ({ property }: PropertyCardProps) => {
             <FaMapMarker className='text-orange-700 mt-1' />
             <span className='text-orange-700'>
               {' '}
-              {property.location.city}, {property.location.state}
+              {property.location?.city}, {property.location?.state}
             </span>
           </div>
           <Link

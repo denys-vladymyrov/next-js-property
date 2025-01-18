@@ -1,21 +1,20 @@
 import PropertyCard from '@/components/PropertyCard';
 // import PropertySearchForm from '@/components/PropertySearchForm';
 // import Pagination from '@/components/Pagination';
-// import Property from '@/models/Property';
-// import connectDB from '@/config/database';
+import Property from '@/models/Property';
+import connectDB from '@/config/database';
+import { IProperty } from '@/models/Property';
 
-import properties from '@/properties.json';
-import { Property } from '@/app/types';
 
 const PropertiesPage = async ({ searchParams: { pageSize = 9, page = 1 } }) => {
-  // await connectDB();
+  await connectDB();
   const skip = (page - 1) * pageSize;
 
-  // const total = await Property.countDocuments({});
-  // const properties = await Property.find({}).skip(skip).limit(pageSize);
+  const total = await Property.countDocuments({});
+  const properties = await Property.find({}).skip(skip).limit(pageSize);
 
   // Calculate if pagination is needed
-  // const showPagination = total > pageSize;
+  const showPagination = total > pageSize;
 
   return (
     <>
@@ -31,8 +30,8 @@ const PropertiesPage = async ({ searchParams: { pageSize = 9, page = 1 } }) => {
             <p>No properties found</p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {properties.map((property: Property, index: number) => (
-                <PropertyCard property={property} key={property._id} />
+              {properties.map((property: IProperty, index: number) => (
+                <PropertyCard property={property} key={property._id?.toString()} />
               ))}
             </div>
           )}
