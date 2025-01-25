@@ -1,10 +1,10 @@
 'use server';
 import connectDB from '@/config/database';
-// import Property from '@/models/Property';
+import Property from '@/models/Property';
 import { getSessionUser } from '@/utils/getSessionUser';
-// import { revalidatePath } from 'next/cache';
-// import { redirect } from 'next/navigation';
-// import cloudinary from '@/config/cloudinary';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import cloudinary from '@/config/cloudinary';
 
 async function addProperty(formData: FormData) {
   await connectDB();
@@ -20,9 +20,9 @@ async function addProperty(formData: FormData) {
   // Access all values for amenities and images
   const amenities = formData.getAll('amenities');
   const images = formData
-    .getAll('images')
-    .filter((image: any) => image.name && image.name !== '');
+    .getAll('images') as File[]; // Явно указываем, что это массив файлов
 
+  const validImages = images.filter((image) => image.name && image.name !== '');
 
   // Create the propertyData object with embedded seller_info
   const propertyData = {
@@ -50,37 +50,38 @@ async function addProperty(formData: FormData) {
       phone: formData.get('seller_info.phone'),
     },
     owner: userId,
+    images: [] as string[]
   };
-  //
-  // const imageUrls = [];
-  //
-  // for (const imageFile of images) {
-  //   const imageBuffer = await imageFile.arrayBuffer();
-  //   const imageArray = Array.from(new Uint8Array(imageBuffer));
-  //   const imageData = Buffer.from(imageArray);
-  //
-  //   // Convert the image data to base64
-  //   const imageBase64 = imageData.toString('base64');
-  //
-  //   // Make request to upload to Cloudinary
-  //   const result = await cloudinary.uploader.upload(
-  //     `data:image/png;base64,${imageBase64}`,
-  //     {
-  //       folder: 'propertypulse',
-  //     }
-  //   );
-  //
-  //   imageUrls.push(result.secure_url);
-  // }
-  //
-  // propertyData.images = imageUrls;
-  //
-  // const newProperty = new Property(propertyData);
-  // await newProperty.save();
-  //
-  // revalidatePath('/', 'layout');
-  //
-  // redirect(`/properties/${newProperty._id}`);
+
+  const imageUrls = [];
+
+  for (const imageFile of validImages) {
+    const imageBuffer = await imageFile.arrayBuffer();
+    const imageArray = Array.from(new Uint8Array(imageBuffer));
+    const imageData = Buffer.from(imageArray);
+
+    // Convert the image data to base64
+    const imageBase64 = imageData.toString('base64');
+
+    // Make request to upload to Cloudinary
+    const result = await cloudinary.uploader.upload(
+      `data:image/png;base64,${imageBase64}`,
+      {
+        folder: 'next-js-property',
+      }
+    );
+
+    imageUrls.push(result.secure_url);
+  }
+
+  propertyData.images = imageUrls;
+
+  const newProperty = new Property(propertyData);
+  await newProperty.save();
+
+  revalidatePath('/', 'layout');
+
+  redirect(`/properties/${newProperty._id}`);
 }
 
 export default addProperty;
