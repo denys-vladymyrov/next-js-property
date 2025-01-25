@@ -171,7 +171,9 @@ const Navbar = () => {
                   <span className='sr-only'>Open user menu</span>
                   <Image
                     className='h-8 w-8 rounded-full'
-                    src={profileDefault}
+                    src={profileImage || profileDefault}
+                    width={40}
+                    height={40}
                     alt=''
                   />
                 </button>
@@ -210,6 +212,10 @@ const Navbar = () => {
                     role='menuitem'
                     tabIndex={-1}
                     id='user-menu-item-2'
+                    onClick={() => {
+                      setIsProfileMenuOpen(false);
+                      signOut({ callbackUrl: '/' });
+                    }}
                   >
                     Sign Out
                   </button>
