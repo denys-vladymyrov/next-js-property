@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { ToastContainer } from 'react-toastify';
 import localFont from "next/font/local";
-import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthProvider from '@/components/AuthProvider';
+import "./globals.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,6 +38,7 @@ export default function RootLayout({
             <Navbar />
             <main>{children}</main>
             <Footer />
+            <ToastContainer />
           </body>
         </html>
       </AuthProvider>
