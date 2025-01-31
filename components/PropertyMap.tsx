@@ -1,15 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
-import { setDefaults, fromAddress } from 'react-geocode';
+import { setDefaults, fromAddress, OutputFormat  } from 'react-geocode';
 import Image from 'next/image';
 import pin from '@/assets/images/pin.svg';
 import Spinner from './Spinner';
+import { IProperty } from '@/models/Property';
 
-const PropertyMap = ({ property }) => {
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+const PropertyMap = ({ property } : { property: IProperty }) => {
+  const [lat, setLat] = useState<number>(0);
+  const [lng, setLng] = useState<number>(0);
   const [viewport, setViewport] = useState({
     latitude: 0,
     longitude: 0,
@@ -24,13 +26,14 @@ const PropertyMap = ({ property }) => {
     key: process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY,
     language: 'en',
     region: 'us',
+    outputFormat: OutputFormat.JSON
   });
 
   useEffect(() => {
     const fetchCoords = async () => {
       try {
         const res = await fromAddress(
-          `${property.location.street} ${property.location.city} ${property.location.state} ${property.location.zipcode}`
+          `${property.location?.street} ${property.location?.city} ${property.location?.state} ${property.location?.zipcode}`
         );
 
         //  Check for results
@@ -72,10 +75,11 @@ const PropertyMap = ({ property }) => {
     !loading && (
       <Map
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        mapLib={import('mapbox-gl')}
+        // @ts-ignore
+        mapLib={mapboxgl}
         initialViewState={{
-          longitude: lng,
-          latitude: lat,
+          longitude: lng || undefined,
+          latitude: lat || undefined,
           zoom: 15,
         }}
         style={{ width: '100%', height: 500 }}

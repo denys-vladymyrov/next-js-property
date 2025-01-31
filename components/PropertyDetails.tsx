@@ -7,6 +7,7 @@ import {
   FaMapMarker,
 } from 'react-icons/fa';
 import { IProperty } from '@/models/Property';
+import PropertyMap from "@/components/PropertyMap";
 
 interface PropertyDetails {
   property: IProperty;
@@ -93,6 +94,9 @@ const PropertyDetails = ({ property }: PropertyDetails ) => {
             </li>
           ))}
         </ul>
+      </div>
+      <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
+        <PropertyMap property={property} />
       </div>
     </main>
   );
