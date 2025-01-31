@@ -1,6 +1,14 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, model, models, Document, Types } from 'mongoose';
+import { IProperty } from '@/models/Property';
 
-const UserSchema = new Schema(
+export interface IUser extends Document {
+  email: string;
+  username: string;
+  image?: string;
+  bookmarks: Types.Array<IProperty>;
+}
+
+const UserSchema = new Schema<IUser>(
   {
     email: {
       type: String,
@@ -26,6 +34,6 @@ const UserSchema = new Schema(
   }
 );
 
-const User = models.User || model('User', UserSchema);
+const User = models.User || model<IUser>('User', UserSchema);
 
 export default User;
