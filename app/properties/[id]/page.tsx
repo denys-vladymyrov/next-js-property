@@ -6,6 +6,8 @@ import { convertToSerializeableObject } from '@/utils/convertToObject';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import PropertyImages from '@/components/PropertyImages';
+import BookmarkButton from "@/components/BookmarkButton";
+import ShareButtons from "@/components/ShareButtons";
 
 const PropertyPage = async ({ params }: { params: { id: string }}) => {
   await connectDB();
@@ -42,6 +44,12 @@ const PropertyPage = async ({ params }: { params: { id: string }}) => {
         <div className='container m-auto py-10 px-6'>
           <div className='grid grid-cols-1 md:grid-cols-70/30 w-full gap-6'>
             <PropertyDetails property={property} />
+
+            {/* <!-- Sidebar --> */}
+            <aside className='space-y-4'>
+              <BookmarkButton property={property} />
+              <ShareButtons property={property} />
+            </aside>
           </div>
         </div>
       </section>
