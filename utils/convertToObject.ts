@@ -1,12 +1,7 @@
 import { IProperty } from '@/models/Property';
+import { IMessage } from "@/models/Message";
 
-/**
- * Converts a Mongoose lean document into a serializable IProperty object.
- *
- * @param leanDocument - The Mongoose lean document to be converted.
- * @returns IProperty object or null if input is invalid.
- */
-export function convertToSerializeableObject(leanDocument: any): IProperty | null {
+export function convertToSerializeableObject(leanDocument: any): IProperty | IMessage | null {
   if (!leanDocument || typeof leanDocument !== 'object') return null;
 
   for (const key of Object.keys(leanDocument)) {
@@ -16,4 +11,19 @@ export function convertToSerializeableObject(leanDocument: any): IProperty | nul
   }
 
   return leanDocument as IProperty;
+}
+
+
+export function convertToSerializeableObjectGen<T extends { [key: string]: any }>(leanDocument: T): T | null {
+  if (!leanDocument || typeof leanDocument !== 'object') return null;
+
+  for (const key of Object.keys(leanDocument)) {
+    const value = leanDocument[key];
+
+    if (value && typeof value.toJSON === 'function' && typeof value.toString === 'function') {
+      (leanDocument as { [key: string]: any })[key] = value.toString();
+    }
+  }
+
+  return leanDocument;
 }
