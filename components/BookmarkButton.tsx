@@ -13,16 +13,20 @@ const BookmarkButton = ({ property } : { property: IProperty }) => {
 
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isUser, setIsUser] = useState(true);
 
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      setIsUser(false);
+      return;
+    }
 
     checkBookmarkStatus(property._id as string).then((res) => {
       if (res.error) toast.error(res.error);
       if (res.isBookmarked) setIsBookmarked(res.isBookmarked);
       setLoading(false);
-
+      setIsUser(true);
     });
   }, [property._id, userId, checkBookmarkStatus]);
 
@@ -39,7 +43,9 @@ const BookmarkButton = ({ property } : { property: IProperty }) => {
     });
   };
 
-  if (loading) return <p className='text-center'>Loading...</p>;
+  if (loading && isUser) return <p className='text-center'>Loading...</p>;
+
+  if (!isUser) return null;
 
   return isBookmarked  ? (
     <button
