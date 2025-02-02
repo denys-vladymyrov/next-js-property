@@ -2,22 +2,24 @@ import PropertyHeaderImage from '@/components/PropertyHeaderImage';
 import PropertyDetails from '@/components/PropertyDetails';
 import connectDB from '@/config/database';
 import Property from '@/models/Property';
-import { convertToSerializeableObject } from '@/utils/convertToObject';
+import {convertToSerializeableObjectGen} from '@/utils/convertToObject';
 import Link from 'next/link';
 import { FaArrowLeft } from 'react-icons/fa';
 import PropertyImages from '@/components/PropertyImages';
 import BookmarkButton from "@/components/BookmarkButton";
 import ShareButtons from "@/components/ShareButtons";
+import PropertyContactForm from "@/components/PropertyContactForm";
+import { IProperty } from "@/models/Property";
 
 const PropertyPage = async ({ params }: { params: { id: string }}) => {
   await connectDB();
-  const propertyDoc = await Property.findById(params.id).lean();
+  const propertyDoc = await Property.findById(params.id).lean<IProperty>();
 
   if (!propertyDoc) {
     return undefined;
   }
 
-  const property = convertToSerializeableObject(propertyDoc);
+  const property = convertToSerializeableObjectGen<IProperty>(propertyDoc);
 
   if (!property) {
     return (
@@ -49,6 +51,7 @@ const PropertyPage = async ({ params }: { params: { id: string }}) => {
             <aside className='space-y-4'>
               <BookmarkButton property={property} />
               <ShareButtons property={property} />
+              <PropertyContactForm property={property} />
             </aside>
           </div>
         </div>
