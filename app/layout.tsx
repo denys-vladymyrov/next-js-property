@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthProvider from '@/components/AuthProvider';
+import { GlobalProvider } from "@/context/GlobalContext";
 import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -31,16 +32,18 @@ export default function RootLayout({
 }>) {
   return (
       <AuthProvider>
-        <html lang="en">
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <ToastContainer />
-          </body>
-        </html>
+        <GlobalProvider>
+          <html lang="en">
+            <body
+              className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+            >
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+              <ToastContainer />
+            </body>
+          </html>
+        </GlobalProvider>
       </AuthProvider>
   );
 }
