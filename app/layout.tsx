@@ -5,8 +5,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AuthProvider from '@/components/AuthProvider';
 import { GlobalProvider } from "@/context/GlobalContext";
-import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
+import 'photoswipe/dist/photoswipe.css';
+import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
