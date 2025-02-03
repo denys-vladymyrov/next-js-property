@@ -1,27 +1,28 @@
 import PropertyCard from '@/components/PropertyCard';
-// import PropertySearchForm from '@/components/PropertySearchForm';
-// import Pagination from '@/components/Pagination';
+import PropertySearchForm from '@/components/PropertySearchForm';
+import Pagination from '@/components/Pagination';
 import Property from '@/models/Property';
 import connectDB from '@/config/database';
 import { IProperty } from '@/models/Property';
 
 
-const PropertiesPage = async ({ searchParams: { pageSize = 9, page = 1 } }) => {
+const PropertiesPage = async ({ searchParams: { pageSize = '9', page = '1' } } :
+{ searchParams: { pageSize: string, page: string}}) => {
+
   await connectDB();
-  const skip = (page - 1) * pageSize;
+  const skip = (parseInt(page) - 1) * parseInt(pageSize);
 
   const total = await Property.countDocuments({});
-  const properties = await Property.find({}).skip(skip).limit(pageSize);
+  const properties = await Property.find({}).skip(skip).limit(parseInt(pageSize));
 
-  // Calculate if pagination is needed
-  const showPagination = total > pageSize;
+  const showPagination = total > parseInt(pageSize);
 
   return (
     <>
       <section className='bg-blue-700 py-4'>
-        {/*<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start'>*/}
-        {/*  <PropertySearchForm />*/}
-        {/*</div>*/}
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-start'>
+          <PropertySearchForm />
+        </div>
       </section>
       <section className='px-4 py-6'>
         <div className='container-xl lg:container m-auto px-4 py-6'>
@@ -35,13 +36,13 @@ const PropertiesPage = async ({ searchParams: { pageSize = 9, page = 1 } }) => {
               ))}
             </div>
           )}
-          {/*{showPagination && (*/}
-          {/*  <Pagination*/}
-          {/*    page={parseInt(page)}*/}
-          {/*    pageSize={parseInt(pageSize)}*/}
-          {/*    totalItems={total}*/}
-          {/*  />*/}
-          {/*)}*/}
+          {showPagination && (
+            <Pagination
+              page={parseInt(page)}
+              pageSize={parseInt(pageSize)}
+              totalItems={total}
+            />
+          )}
         </div>
       </section>
     </>
