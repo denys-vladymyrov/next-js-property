@@ -25,7 +25,7 @@ bun dev
 7. Vercel.
 8. Cloudinary
 
-Production URL: 
+Production URL: https://next-js-property.vercel.app/
 
 ## How to run
 
