@@ -3,7 +3,7 @@ import { FaArrowAltCircleLeft } from 'react-icons/fa';
 import PropertyCard from '@/components/PropertyCard';
 import PropertySearchForm from '@/components/PropertySearchForm';
 import connectDB from '@/config/database';
-import Property from '@/models/Property';
+import Property, {IProperty} from '@/models/Property';
 import { convertToSerializeableObject } from '@/utils/convertToObject';
 
 interface SearchParams {
@@ -33,7 +33,7 @@ const SearchResultsPage = async ({ searchParams: { location, propertyType } }: {
     query.type = new RegExp(propertyType, 'i');
   }
 
-  const propertiesQueryResults = await Property.find(query).lean();
+  const propertiesQueryResults = await Property.find(query).lean<IProperty[]>();
   const properties = propertiesQueryResults.map(convertToSerializeableObject);
   const filteredProperties = properties.filter((property): property is NonNullable<typeof property> => property !== null && property !== undefined);
 
@@ -58,7 +58,7 @@ const SearchResultsPage = async ({ searchParams: { location, propertyType } }: {
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {filteredProperties.map((property, index) => (
-                <PropertyCard key={property._id as string || index} property={property} />
+                <PropertyCard key={property._id as string || index} property={property as IProperty} />
               ))}
             </div>
           )}
