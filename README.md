@@ -18,12 +18,13 @@ bun dev
 
 1. Next.js
 2. TypeScript
-3. Mongodb
-4. Next-auth
-5. Geocode
-6. Map-gl
-7. Vercel.
-8. Cloudinary
+3. Tailwind CSS
+4. Mongodb
+5. Next-auth
+6. Geocode
+7. Map-gl
+8. Vercel.
+9. Cloudinary
 
 Production URL: https://next-js-property.vercel.app/
 
